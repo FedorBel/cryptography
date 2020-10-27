@@ -40,11 +40,12 @@ int main()
 		<< "\"Hex encoded string\"\n";
 	cout << "=======================\n\n";
 
-	cout << "Enter file name:";
+	cout << "Enter input file name:";
 	//cin >> path;
 
 	ttp_decoder::BruteForce decoder;
-	vector<string> ciphertext = ttp_decoder::ReadFromFile(path);
+	decoder.SetCiphertexts(ttp_decoder::ReadFromFile(path));
+	string plaintext = decoder.Decode();
 	//ttp_decoder::ClearFile();
 
 
