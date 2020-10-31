@@ -27,27 +27,71 @@ d13e6f0a803b54fde9e77472dbff89d71b57bddef121336cb85ccb8f3315f4b52e301d16e9f52f90
 int main()
 {
 	cout << "Two-time pad attack." << "\n\n";
-	string path = "ciphertext.txt";
+	string read_path = "ciphertext.txt";
 	cout << "Input file format example:" << "\n\n";
 	cout << "=======================\n";
 	cout << "Text 1\n"
-		<< "\"Hex encoded string\"\n"
+		<< "Hex encoded string\n"
 		<< "Text 2\n"
-		<< "\"Hex encoded string\"\n"
+		<< "Hex encoded string\n"
 		<< "Text N\n"
-		<< "\"Hex encoded string\"\n"
+		<< "Hex encoded string\n"
 		<< "Target\n"
-		<< "\"Hex encoded string\"\n";
+		<< "Hex encoded string\n";
 	cout << "=======================\n\n";
 
-	cout << "Enter input file name:";
-	//cin >> path;
+	cout << "Default input file name: " << read_path << "\n";
+	cout << "Change it? y/n\n";
+	char change_res;
+	cin >> change_res;
+
+	while (change_res != 'y' && change_res != 'n')
+	{
+		cout << "Wrong input!\n";
+		cout << "Default input file name: " << read_path << "\n";
+		cout << "Change it? y/n\n";
+		cin >> change_res;
+	}
+
+	if (change_res == 'y')
+	{
+		cout << "Enter input file name: ";
+		cin >> read_path;
+	}
+
+
+	cout << "Decoding started..." << std::endl;
+	
+	vector<string> ciphertexts = ttp_decoder::ReadFromFile(read_path);
+	string target_text_hex = ciphertexts.back();
+	vector<int> target_text = ttp_decoder::HexStringToDec(target_text_hex);
 
 	ttp_decoder::BruteForce decoder;
-	decoder.SetCiphertexts(ttp_decoder::ReadFromFile(path));
-	string plaintext = decoder.Decode();
+	decoder.SetCiphertexts(ciphertexts);
+	vector<int> key = decoder.CrackKey(); // normal string
+	string plaintext = ttp_decoder::Decode(target_text, key);
 	//ttp_decoder::ClearFile();
+	string write_path = "plaintext.txt";
 
+	cout << "Default output file name: " << write_path << "\n";
+	cout << "Change it? y/n\n";
+	cin >> change_res;
+
+	while (change_res != 'y' && change_res != 'n')
+	{
+		cout << "Wrong input!\n";
+		cout << "Default output file name: " << write_path << "\n";
+		cout << "Change it? y/n\n";
+		cin >> change_res;
+	}
+
+	if (change_res == 'y')
+	{
+		cout << "Enter input file name: ";
+		cin >> write_path;
+	}
+
+	ttp_decoder::WriteToFile(write_path, plaintext);
 
 	return 0;
 }

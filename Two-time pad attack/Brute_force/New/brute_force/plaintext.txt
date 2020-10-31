@@ -1,0 +1,2 @@
+Target plaintext: 
+The secuet message is: WhZn using a stream cipher, never use the key more than once
